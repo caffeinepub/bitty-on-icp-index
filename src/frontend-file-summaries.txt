@@ -1,0 +1,18 @@
+{
+  "frontend/src/App.tsx": "Main application component displaying BITTY ON ICP INDEX with hero section, animated coin, supply metrics, holder list, and an updated banner message indicating historical data has been loaded and ongoing 5-minute indexing is active.",
+  "frontend/src/components/Header.tsx": "Navigation header component displaying BITTY branding with logo and link to ICPSwap trading page.",
+  "frontend/src/components/Footer.tsx": "Footer component displaying copyright notice and ledger canister ID without the caffeine.ai attribution.",
+  "frontend/src/components/AnimatedCoin.tsx": "2D animated coin component using CSS animations that rolls the BITTY coin texture horizontally across the screen over 5 seconds, pauses at center for 5 seconds, then repeats the cycle continuously.",
+  "frontend/src/components/SupplyMetrics.tsx": "Card component displaying total and circulating supply metrics for BITTY tokens (999,999,999.92M).",
+  "frontend/src/components/PriceDisplay.tsx": "Card component displaying BITTY token price in both ICP and USD formats, with ICP price showing proper decimal notation with '<' prefix for very small values and USD price displayed in full decimal format (e.g., $0.000000319) instead of scientific notation.",
+  "frontend/src/components/AddressSearch.tsx": "Search interface component allowing users to query BITTY token balances for any ICP address.",
+  "frontend/src/components/TransactionList.tsx": "Paginated table component displaying indexed BITTY transactions with transaction type badges (Swap ICP for BITTYICP / Swap BITTYICP for ICP) using the Direction enum from the backend interface, formatted addresses, amounts, timestamps, and pagination controls styled with gold theme.",
+  "frontend/src/hooks/useQueries.ts": "React Query hook for fetching holder data from the backend with automatic refetching every 5 minutes (300000ms) and 4-minute stale time to keep holder information synchronized with ongoing backend indexing.",
+  "frontend/src/hooks/usePriceData.ts": "Custom hook managing price data state with auto-refresh and last updated timestamp tracking.",
+  "frontend/src/hooks/useTransactions.ts": "Custom hook that fetches all indexed transactions from the backend and implements client-side pagination by slicing the full transaction array into 25-item pages, returning paginated data with loading and error states.",
+  "frontend/src/hooks/useAddressBalance.ts": "Custom hook handling address balance queries with validation and error handling.",
+  "frontend/src/index.css": "Global styles with OKLCH-based gold color system and CSS keyframes for the 2D coin rolling animation with horizontal translation and rotation effects.",
+  "frontend/tailwind.config.js": "Tailwind configuration extended with gold theme colors, custom shadows, font families, and animations for the BITTY brand.",
+  "frontend/src/hooks/useHolderData.ts": "Custom hook that wraps useGetHolderData query hook and provides holders array with loading and error states for use in components.",
+  "frontend/src/components/HolderList.tsx": "Card component displaying token holders sorted by balance descending (largest holders first) in a table with three columns (Address, Balance, % of Supply), including holder count in the header, loading skeleton, and empty state handling."
+}

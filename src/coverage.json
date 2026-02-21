@@ -1,0 +1,92 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-21T19:32:22.154Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 7,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-40",
+        "summary": "Implement one-time historical backfill at canister deployment/upgrade that fetches all historical transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai using ICRC-2 standard to build the complete transaction history from the token's inception",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-41",
+        "summary": "Create separate stable storage for complete holder list maintaining addresses, BITTYICP balances, and percentage of total supply (999,999,999.92M) for all holders derived from historical and ongoing transaction data",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-42",
+        "summary": "Update the existing 5-minute polling timer to incrementally update holder balances by processing only new transactions without re-scanning the entire ledger, ensuring efficient ongoing updates",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-43",
+        "summary": "Maintain the existing rolling window storage of the last 100 transactions in stable memory for transaction history display, independent of the complete holder list compilation",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-44",
+        "summary": "Compile holder list by analyzing all transactions (both from historical backfill and ongoing indexing) to identify unique holder addresses, calculate current balances using ICRC-2 icrc1_balance_of method, and compute percentage of total supply",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-45",
+        "summary": "Update frontend HolderList component and useHolderData hook to fetch and display the complete holder list from the backend, showing all historical holders rather than only holders from transactions indexed since deployment",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useHolderData.ts",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/HolderList.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useHolderData.ts",
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/HolderList.tsx"
+        ]
+      },
+      {
+        "id": "REQ-46",
+        "summary": "Update the 'Backend Indexing In Progress' banner message in App.tsx to accurately reflect that historical backfill has completed and ongoing indexing is active, removing the misleading 'currently being configured' language",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/HolderList.tsx",
+    "frontend/src/hooks/useHolderData.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

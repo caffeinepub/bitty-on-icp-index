@@ -1,0 +1,475 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 19,
+  "summary": "BITTY ON ICP INDEX - A blockchain explorer/index for the BITTY ON ICP meme token. Integrates with ledger canister qroj6-lyaaa-aaaam-qeqta-cai (ICRC-2 standard) and ICPSwap pool canister wkyqn-qqaaa-aaaar-qbyxq-cai for live price data. Features: transaction history (last 100, paginated 25 per page) with continuous indexing (polls every 5 minutes, stores from deployment forward), address search with balance lookup, live ICP price per token (format: '1 BITTYICP = < 0.00001 ICP'), supply metrics (999,999,999.92M total/circulating), 2D animated BITTY coin with rolling animation using CSS (rolls across screen in 5 seconds, stops at center for 5 seconds, repeats), and holder section displaying all holders with balances and percentage of total supply held (compiled from transaction history analysis).",
+  "architectural_notes": [
+    "Ledger canister: qroj6-lyaaa-aaaam-qeqta-cai (ICRC-2 standard)",
+    "ICPSwap pool canister: wkyqn-qqaaa-aaaar-qbyxq-cai for live price data",
+    "Transaction pagination: 25 transactions per page, total 100 recent",
+    "Integration designed for wallet compatibility (Oisy)",
+    "2D coin animation using CSS: rolls horizontally across screen (5s), stops at center (5s), repeats cycle",
+    "Holder list compiled by analyzing transaction history to identify unique addresses, then querying each balance",
+    "Index canister polls ledger every 5 minutes using timer for continuous transaction monitoring",
+    "Transactions stored in stable memory with rolling window of 100 most recent",
+    "Price display functionality removed entirely - to be rebuilt from scratch",
+    "Historical backfill runs once at deployment/upgrade to fetch all ledger transactions and populate initial holder list"
+  ],
+  "known_issues": [
+    "Tagline text shows 'BITTY' instead of '$BITTYICP' - needs content update",
+    "Footer contains 'Built with using caffeine.ai' text that should be removed"
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-query-ledger-canister-qroj6-lyaaa-aaaam-qeqta-cai-icrc-2-standard-to-fetch-and-display-the-last-100-transactions-with-pagination-showing-25-transactions-per-page",
+      "title": "Query ledger canister qroj6-lyaaa-aaaam-qeqta-cai (ICRC-2 standard) to fetch and display the last 100 transactions with pagination showing 25 transactions per page",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-address-search-functionality-that-queries-ledger-canister-qroj6-lyaaa-aaaam-qeqta-cai-using-icrc-2-icrc1-balance-of-method-to-display-the-balance-for-any-searched-address",
+      "title": "Implement address search functionality that queries ledger canister qroj6-lyaaa-aaaam-qeqta-cai using ICRC-2 icrc1_balance_of method to display the balance for any searched address",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-query-icpswap-pool-canister-wkyqn-qqaaa-aaaar-qbyxq-cai-to-fetch-and-display-live-bitty-token-price-in-both-usd-and-icp",
+      "title": "Query ICPSwap pool canister wkyqn-qqaaa-aaaar-qbyxq-cai to fetch and display live BITTY token price in both USD and ICP",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-total-supply-and-circulating-supply-metrics-showing-999-999-999-92-million-bitty-tokens-for-both-values",
+      "title": "Display total supply and circulating supply metrics showing 999,999,999.92 Million BITTY tokens for both values",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-3d-animated-bitty-coin-using-three-js-and-react-three-fiber-that-glimmers-and-rolls-back-and-forth-every-few-seconds-using-the-uploaded-coin-image-img-4570-jpeg-as-texture-after-cropping-out-the-background-to-show-only-the-gold-coin-with-the-angry-orange-character",
+      "title": "Create 3D animated BITTY coin using Three.js and React Three Fiber that glimmers and rolls back and forth every few seconds, using the uploaded coin image (IMG_4570.jpeg) as texture after cropping out the background to show only the gold coin with the angry orange character",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-gold-theme-throughout-the-interface-matching-the-bitty-coin-branding-with-warm-gold-tones-complementary-accent-colors-from-the-coin-design-orange-purple-blue-rings-and-ensure-consistent-visual-identity",
+      "title": "Apply gold theme throughout the interface matching the BITTY coin branding with warm gold tones, complementary accent colors from the coin design (orange, purple, blue rings), and ensure consistent visual identity",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-render-the-generated-3d-bitty-coin-image-as-a-static-asset-in-frontend-public-assets-generated-and-display-it-prominently-on-the-main-page",
+      "title": "Render the generated 3D BITTY coin image as a static asset in frontend/public/assets/generated and display it prominently on the main page",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-3d-coin-animation-in-animatedcoin-component-to-properly-render-the-gold-coin-with-the-img-4570-jpeg-texture-showing-the-angry-orange-character-instead-of-displaying-only-a-shadow-silhouette-ensure-the-glimmer-and-rolling-back-and-forth-animation-effects-work-correctly-using-three-js-and-react-three-fiber",
+      "title": "Fix the 3D coin animation in AnimatedCoin component to properly render the gold coin with the IMG_4570.jpeg texture showing the angry orange character, instead of displaying only a shadow/silhouette. Ensure the glimmer and rolling back-and-forth animation effects work correctly using Three.js and React Three Fiber.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-tagline-text-from-your-complete-blockchain-explorer-for-bitty-token-transactions-balances-and-live-market-data-to-your-complete-blockchain-explorer-for-bittyicp-token-transactions-balances-and-live-market-data",
+      "title": "Update the tagline text from 'Your complete blockchain explorer for BITTY token transactions, balances, and live market data' to 'Your complete blockchain explorer for $BITTYICP token transactions, balances, and live market data'",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-footer-text-built-with-using-caffeine-ai-from-the-footer-component",
+      "title": "Remove the footer text 'Built with using caffeine.ai' from the Footer component",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-pricedisplay-component-to-show-price-in-the-format-1-bittyicp-0-00001-icp-matching-the-reference-image-img-5039-jpeg-with-proper-decimal-notation-and-prefix-for-very-small-numbers",
+      "title": "Update PriceDisplay component to show price in the format '1 BITTYICP = < 0.00001 ICP' matching the reference image (IMG_5039.jpeg), with proper decimal notation and '<' prefix for very small numbers",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-usd-pricing-display-entirely-from-pricedisplay-component-showing-only-icp-price-per-token",
+      "title": "Remove USD pricing display entirely from PriceDisplay component, showing only ICP price per token",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-existing-three-js-3d-animatedcoin-component-with-a-css-based-2d-rolling-animation-using-the-img-4570-jpeg-texture",
+      "title": "Replace the existing Three.js 3D AnimatedCoin component with a CSS-based 2D rolling animation using the IMG_4570.jpeg texture",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-2d-coin-rolling-animation-where-the-coin-rolls-horizontally-across-the-screen-from-one-side-to-the-other-in-5-seconds-stops-at-center-for-5-seconds-then-repeats-the-cycle-continuously",
+      "title": "Implement 2D coin rolling animation where the coin rolls horizontally across the screen from one side to the other in 5 seconds, stops at center for 5 seconds, then repeats the cycle continuously",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-pricedisplay-component-to-display-both-icp-price-format-1-bittyicp-0-00001-icp-and-usd-price-in-scientific-notation-format-e-g-3-19-10-or-0-0-5-319-matching-the-reference-data-where-1-bittyicp-0-00001-icp-0-0-5-319",
+      "title": "Update PriceDisplay component to display both ICP price (format: '1 BITTYICP = <0.00001 ICP') and USD price in scientific notation format (e.g., '$3.19 × 10⁻⁶' or '$0.0{5}319') matching the reference data where 1 BITTYICP = <0.00001 ICP = $0.0{5}319",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-pricedisplay-component-to-display-usd-price-in-full-decimal-format-showing-0-000000319-instead-of-scientific-notation-format-0-0-5-319",
+      "title": "Update PriceDisplay component to display USD price in full decimal format showing $0.000000319 instead of scientific notation format ($0.0{5}319)",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-holderlist-component-displaying-holder-addresses-bittyicp-balances-and-percentage-of-total-supply-in-a-table-format",
+      "title": "Create HolderList component displaying holder addresses, BITTYICP balances, and percentage of total supply in a table format",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-position-holderlist-component-at-the-bottom-of-the-page-below-the-transaction-list-section",
+      "title": "Position HolderList component at the bottom of the page below the transaction list section",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-react-query-hook-for-fetching-holder-data-with-balance-and-supply-percentage-information",
+      "title": "Create React Query hook for fetching holder data with balance and supply percentage information",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-frontend-usetransactions-hook-and-transactionlist-component-to-fetch-transactions-from-the-new-backend-getindexedtransactions-method-instead-of-direct-ledger-queries",
+      "title": "Update frontend useTransactions hook and TransactionList component to fetch transactions from the new backend getIndexedTransactions method instead of direct ledger queries",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-delete-the-pricedisplay-component-file-frontend-src-components-pricedisplay-tsx-completely-from-the-codebase",
+      "title": "Delete the PriceDisplay component file (frontend/src/components/PriceDisplay.tsx) completely from the codebase",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-all-imports-and-references-to-pricedisplay-component-from-app-tsx-and-any-other-frontend-files-that-use-it",
+      "title": "Remove all imports and references to PriceDisplay component from App.tsx and any other frontend files that use it",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-usepricedata-hook-file-frontend-src-hooks-usepricedata-ts-completely-from-the-codebase",
+      "title": "Remove usePriceData hook file (frontend/src/hooks/usePriceData.ts) completely from the codebase",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-all-price-related-query-functions-from-usequeries-ts-hook-including-any-queries-for-price-data-from-the-backend-actor",
+      "title": "Remove all price-related query functions from useQueries.ts hook including any queries for price data from the backend actor",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-frontend-holderlist-component-and-useholderdata-hook-to-fetch-and-display-the-complete-holder-list-from-the-backend-showing-all-historical-holders-rather-than-only-holders-from-transactions-indexed-since-deployment",
+      "title": "Update frontend HolderList component and useHolderData hook to fetch and display the complete holder list from the backend, showing all historical holders rather than only holders from transactions indexed since deployment",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-backend-indexing-in-progress-banner-message-in-app-tsx-to-accurately-reflect-that-historical-backfill-has-completed-and-ongoing-indexing-is-active-removing-the-misleading-currently-being-configured-language",
+      "title": "Update the 'Backend Indexing In Progress' banner message in App.tsx to accurately reflect that historical backfill has completed and ongoing indexing is active, removing the misleading 'currently being configured' language",
+      "reqIds": [
+        "REQ-46"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Display last 100 transactions from ledger canister, paginated (25 per page)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Address search functionality showing balance for any address",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Live USD and ICP price display from ICPSwap pool canister",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Display total and circulating supply (999,999,999.92M)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "3D animated BITTY coin with glimmer and rolling effects using Three.js",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Gold theme matching BITTY branding",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Replace 3D coin with 2D rolling animation: rolls across screen (5s), stops at center (5s), repeats",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Display holder section at bottom of page showing addresses with BITTYICP balances and percentage of total supply held, compiled from transaction history analysis",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Create backend method to compile list of unique holder addresses by analyzing transaction history from ledger canister qroj6-lyaaa-aaaam-qeqta-cai",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Query individual balance for each holder address using ICRC-2 icrc1_balance_of method from ledger canister qroj6-lyaaa-aaaam-qeqta-cai",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Calculate percentage of total supply (999,999,999.92M BITTYICP) held by each address",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Implement backend timer that polls ledger canister qroj6-lyaaa-aaaam-qeqta-cai every 5 minutes for new transactions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Store transactions in stable memory with rolling window of latest 100 transactions, auto-removing older ones",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Start transaction indexing from deployment time forward (no historical backfill)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Create query endpoint for frontend to fetch indexed transactions from stable memory",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Create backend timer mechanism that polls ledger canister qroj6-lyaaa-aaaam-qeqta-cai every 5 minutes (300 seconds) using Internet Computer's timer API to fetch new transactions",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Implement stable memory storage for transactions using stable variables to persist a rolling window of the latest 100 transactions across canister upgrades",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Track the last processed transaction index in stable memory to ensure polling starts from the correct position and avoids duplicate transaction processing",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Create backend query method getIndexedTransactions that returns the stored transactions from stable memory in reverse chronological order (newest first) for frontend display",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Update backend holder list compilation logic to derive holder addresses and balances from the indexed transaction data stored in stable memory instead of querying ledger transaction history",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Implement error handling and logging for the polling timer to capture and record failures when querying the ledger canister, ensuring the indexing service remains resilient",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Remove PriceDisplay component entirely from frontend (delete component file, remove all imports and references)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Remove all backend price calculation logic (ICPSwap pool queries, ICP-to-USD conversion, helper functions) to rebuild from scratch later",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Remove all price calculation logic from backend/main.mo including ICPSwap pool canister queries (wkyqn-qqaaa-aaaar-qbyxq-cai), ICP-to-USD conversion functions, and any helper functions related to price fetching",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-39",
+      "summary": "Remove LiquidityEvent types and events map from backend/main.mo since they were used for price calculations",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-40",
+      "summary": "Remove LiquidityEvent-related code from backend/migration.mo since price calculation logic is being removed",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-41",
+      "summary": "Implement one-time historical backfill at deployment/upgrade to fetch all historical transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai and build complete holder list",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-42",
+      "summary": "Create separate holder list storage in stable memory that maintains complete holder data (addresses, balances, supply percentages) derived from all transactions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-43",
+      "summary": "Update existing 5-minute polling timer to incrementally update holder balances from new transactions only (efficient updates without re-scanning entire ledger)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-44",
+      "summary": "Implement one-time historical backfill at canister deployment/upgrade that fetches all historical transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai using ICRC-2 standard to build the complete transaction history from the token's inception",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-45",
+      "summary": "Create separate stable storage for complete holder list maintaining addresses, BITTYICP balances, and percentage of total supply (999,999,999.92M) for all holders derived from historical and ongoing transaction data",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-46",
+      "summary": "Update the existing 5-minute polling timer to incrementally update holder balances by processing only new transactions without re-scanning the entire ledger, ensuring efficient ongoing updates",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-47",
+      "summary": "Maintain the existing rolling window storage of the last 100 transactions in stable memory for transaction history display, independent of the complete holder list compilation",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-48",
+      "summary": "Compile holder list by analyzing all transactions (both from historical backfill and ongoing indexing) to identify unique holder addresses, calculate current balances using ICRC-2 icrc1_balance_of method, and compute percentage of total supply",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "BITTY ON ICP INDEX",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

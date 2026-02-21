@@ -1,0 +1,52 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Frontend updates for historical holder data and indexing status banner",
+  "requirements": [
+    {
+      "id": "REQ-45",
+      "summary": "Update frontend HolderList component and useHolderData hook to fetch and display the complete holder list from the backend",
+      "acceptanceCriteria": [
+        "HolderList component displays all holders from the complete historical holder list",
+        "Holder data includes address, BITTYICP balance, and percentage of total supply",
+        "Component shows loading state during initial historical backfill",
+        "Holder list updates automatically every 5 minutes when new transactions are indexed",
+        "Empty state is handled gracefully if no holders exist"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useHolderData.ts",
+          "operation": "modify",
+          "description": "Update the useHolderData hook to fetch the complete holder list from the backend using the getUniqueHolderAddresses method. Configure automatic refetching every 5 minutes (300000ms) to keep holder data synchronized with ongoing backend indexing. Add loading, error, and empty state handling. The hook should return holder data including principal (address), balance, and percentage of total supply."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Update the useGetHolderData query hook to call backend.getUniqueHolderAddresses() which returns Array<HolderInfo> containing principal, balance (bigint), and percentage (number) for each holder. Configure the query with refetchInterval: 300000 (5 minutes) to automatically update holder data as new transactions are indexed. Add staleTime configuration to prevent unnecessary refetches."
+        },
+        {
+          "path": "frontend/src/components/HolderList.tsx",
+          "operation": "modify",
+          "description": "Update the HolderList component to display complete historical holder data including address (principal), BITTYICP balance formatted with appropriate decimals, and percentage of total supply (999,999,999.92M tokens). Add a loading skeleton state during initial historical backfill. Add an informative empty state if no holders exist. Display holder count in the card header. Ensure the table columns show: Address (truncated with copy functionality), Balance (formatted with token symbol), and Percentage (formatted as percentage with 2 decimal places). Sort holders by balance descending (largest holders first)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-46",
+      "summary": "Update the 'Backend Indexing In Progress' banner message in App.tsx to reflect completed historical backfill and ongoing indexing",
+      "acceptanceCriteria": [
+        "Banner message clearly indicates that historical data has been loaded",
+        "Message explains that the system continues to index new transactions every 5 minutes",
+        "Language is user-friendly and informative rather than technical",
+        "Banner remains visible to inform users about the continuous indexing process"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Update the banner message in App.tsx from 'Transaction history and address balance features are currently being configured. Token holder information is available below.' to a more accurate message such as: 'Historical transaction data has been loaded. The system continues to index new transactions every 5 minutes to keep holder information up to date.' Maintain the same styling and visual prominence of the banner. Keep the banner visible to inform users about the continuous indexing process."
+        }
+      ]
+    }
+  ]
+}

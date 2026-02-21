@@ -1,0 +1,161 @@
+{
+  "kind": "build_request",
+  "title": "Implement historical transaction backfill and complete holder indexing",
+  "projectName": "BITTY ON ICP INDEX",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-40",
+      "text": "Implement one-time historical backfill at canister deployment/upgrade that fetches all historical transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai using ICRC-2 standard to build the complete transaction history from the token's inception",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Perform a one-time backfill at deployment/upgrade to fetch all historical transactions and build the complete holder list"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend fetches all historical transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai during deployment/upgrade initialization",
+        "Backfill process starts from transaction index 0 and continues until the latest transaction is reached",
+        "Backfill completes before canister becomes available to serve queries",
+        "Historical transactions are processed to build the complete holder list"
+      ]
+    },
+    {
+      "id": "REQ-41",
+      "text": "Create separate stable storage for complete holder list maintaining addresses, BITTYICP balances, and percentage of total supply (999,999,999.92M) for all holders derived from historical and ongoing transaction data",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "keep storing the last 100 transactions but add a separate process to build the full holder list"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Holder list is stored separately from the rolling 100-transaction window",
+        "Each holder entry contains address (Principal), current balance (Nat), and percentage of total supply",
+        "Holder list persists across canister upgrades using stable memory",
+        "Holder list is derived from all transactions (historical backfill + ongoing indexed transactions)"
+      ]
+    },
+    {
+      "id": "REQ-42",
+      "text": "Update the existing 5-minute polling timer to incrementally update holder balances by processing only new transactions without re-scanning the entire ledger, ensuring efficient ongoing updates",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Continue polling for new transactions only to update holder balances incrementally (efficient)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Polling timer continues to run every 5 minutes (300 seconds) as currently implemented",
+        "Timer fetches only new transactions since the last processed transaction index",
+        "New transactions update holder balances incrementally (add/subtract from existing balances)",
+        "No full ledger re-scan occurs during ongoing updates",
+        "Holder percentages are recalculated after each update cycle"
+      ]
+    },
+    {
+      "id": "REQ-43",
+      "text": "Maintain the existing rolling window storage of the last 100 transactions in stable memory for transaction history display, independent of the complete holder list compilation",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "keep storing the last 100 transactions but add a separate process to build the full holder list"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Last 100 transactions continue to be stored in stable memory as currently implemented",
+        "Older transactions are automatically removed when the 100-transaction limit is exceeded",
+        "Transaction history storage operates independently from holder list compilation",
+        "getIndexedTransactions query method continues to return the last 100 transactions in reverse chronological order"
+      ]
+    },
+    {
+      "id": "REQ-44",
+      "text": "Compile holder list by analyzing all transactions (both from historical backfill and ongoing indexing) to identify unique holder addresses, calculate current balances using ICRC-2 icrc1_balance_of method, and compute percentage of total supply",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "build the complete holder list",
+          "Continue polling for new transactions only to update holder balances incrementally"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All unique addresses that have ever received BITTYICP tokens are identified from transaction data",
+        "Current balance for each holder is queried from ledger canister qroj6-lyaaa-aaaam-qeqta-cai using icrc1_balance_of",
+        "Percentage of total supply (999,999,999.92M BITTYICP) is calculated for each holder",
+        "Holders with zero balance are excluded from the final list",
+        "Holder list is sorted by balance descending (largest holders first)"
+      ]
+    },
+    {
+      "id": "REQ-45",
+      "text": "Update frontend HolderList component and useHolderData hook to fetch and display the complete holder list from the backend, showing all historical holders rather than only holders from transactions indexed since deployment",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "populate all the holders of $BITTYICP from all previous transactions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "HolderList component displays all holders from the complete historical holder list",
+        "Holder data includes address, BITTYICP balance, and percentage of total supply",
+        "Component shows loading state during initial historical backfill",
+        "Holder list updates automatically every 5 minutes when new transactions are indexed",
+        "Empty state is handled gracefully if no holders exist"
+      ]
+    },
+    {
+      "id": "REQ-46",
+      "text": "Update the 'Backend Indexing In Progress' banner message in App.tsx to accurately reflect that historical backfill has completed and ongoing indexing is active, removing the misleading 'currently being configured' language",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Banner message clearly indicates that historical data has been loaded",
+        "Message explains that the system continues to index new transactions every 5 minutes",
+        "Language is user-friendly and informative rather than technical",
+        "Banner remains visible to inform users about the continuous indexing process"
+      ]
+    }
+  ],
+  "constraints": [
+    "Maintain the single-actor architecture in backend/main.mo",
+    "Preserve the existing rolling 100-transaction storage mechanism",
+    "Keep the 5-minute polling interval unchanged",
+    "Do not modify immutable frontend paths (useInternetIdentity, useActor, main.tsx, components/ui)",
+    "Use ICRC-2 standard methods for all ledger canister interactions",
+    "Historical backfill must complete during deployment/upgrade before serving queries"
+  ],
+  "nonGoals": [
+    "Real-time WebSocket updates for transactions",
+    "Pagination for the holder list (show all holders)",
+    "Filtering or search functionality within the holder list",
+    "Historical price data or price charts",
+    "Transaction filtering or advanced search"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
