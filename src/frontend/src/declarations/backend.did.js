@@ -17,14 +17,48 @@ export const AssetSymbol = IDL.Text;
 export const PriceResultNat = IDL.Variant({
   'completed' : IDL.Record({ 'value' : IDL.Nat }),
 });
+export const http_header = IDL.Record({
+  'value' : IDL.Text,
+  'name' : IDL.Text,
+});
+export const http_request_result = IDL.Record({
+  'status' : IDL.Nat,
+  'body' : IDL.Vec(IDL.Nat8),
+  'headers' : IDL.Vec(http_header),
+});
+export const TransformationInput = IDL.Record({
+  'context' : IDL.Vec(IDL.Nat8),
+  'response' : http_request_result,
+});
+export const TransformationOutput = IDL.Record({
+  'status' : IDL.Nat,
+  'body' : IDL.Vec(IDL.Nat8),
+  'headers' : IDL.Vec(http_header),
+});
 
 export const idlService = IDL.Service({
   'getHolderAddress' : IDL.Func([IDL.Principal], [HolderInfo], []),
+  'getMetrics' : IDL.Func(
+      [],
+      [
+        IDL.Record({
+          'marketCap' : IDL.Float64,
+          'volume24h' : IDL.Float64,
+          'price' : IDL.Float64,
+        }),
+      ],
+      [],
+    ),
   'getUniqueHolderAddresses' : IDL.Func([], [IDL.Vec(HolderInfo)], []),
   'swapTokens' : IDL.Func(
       [AssetSymbol, AssetSymbol, IDL.Nat],
       [PriceResultNat],
       [],
+    ),
+  'transform' : IDL.Func(
+      [TransformationInput],
+      [TransformationOutput],
+      ['query'],
     ),
   'validateAddress' : IDL.Func([IDL.Vec(IDL.Nat8)], [IDL.Bool], ['query']),
 });
@@ -41,14 +75,45 @@ export const idlFactory = ({ IDL }) => {
   const PriceResultNat = IDL.Variant({
     'completed' : IDL.Record({ 'value' : IDL.Nat }),
   });
+  const http_header = IDL.Record({ 'value' : IDL.Text, 'name' : IDL.Text });
+  const http_request_result = IDL.Record({
+    'status' : IDL.Nat,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(http_header),
+  });
+  const TransformationInput = IDL.Record({
+    'context' : IDL.Vec(IDL.Nat8),
+    'response' : http_request_result,
+  });
+  const TransformationOutput = IDL.Record({
+    'status' : IDL.Nat,
+    'body' : IDL.Vec(IDL.Nat8),
+    'headers' : IDL.Vec(http_header),
+  });
   
   return IDL.Service({
     'getHolderAddress' : IDL.Func([IDL.Principal], [HolderInfo], []),
+    'getMetrics' : IDL.Func(
+        [],
+        [
+          IDL.Record({
+            'marketCap' : IDL.Float64,
+            'volume24h' : IDL.Float64,
+            'price' : IDL.Float64,
+          }),
+        ],
+        [],
+      ),
     'getUniqueHolderAddresses' : IDL.Func([], [IDL.Vec(HolderInfo)], []),
     'swapTokens' : IDL.Func(
         [AssetSymbol, AssetSymbol, IDL.Nat],
         [PriceResultNat],
         [],
+      ),
+    'transform' : IDL.Func(
+        [TransformationInput],
+        [TransformationOutput],
+        ['query'],
       ),
     'validateAddress' : IDL.Func([IDL.Vec(IDL.Nat8)], [IDL.Bool], ['query']),
   });

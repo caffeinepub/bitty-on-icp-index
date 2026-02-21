@@ -1,4 +1,4 @@
-import { Coins } from 'lucide-react';
+import { Coins, ExternalLink } from 'lucide-react';
 
 export function Header() {
   return (
@@ -16,14 +16,15 @@ export function Header() {
           </div>
         </div>
         
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="flex items-center gap-6">
           <a 
-            href="https://app.icpswap.com/swap/pro?input=ryjl3-tyaaa-aaaaa-aaaba-cai&output=qroj6-lyaaa-aaaam-qeqta-cai"
+            href="https://bittyonicp.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm font-bold text-amber-500 hover:text-amber-400 transition-colors"
           >
-            Trade on ICPSwap
+            BITTYONICP.COM
+            <ExternalLink className="w-4 h-4" />
           </a>
         </nav>
       </div>

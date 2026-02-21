@@ -2,12 +2,16 @@ import Set "mo:core/Set";
 import List "mo:core/List";
 import Float "mo:core/Float";
 import Principal "mo:core/Principal";
-import Migration "migration";
+import OutCall "http-outcalls/outcall";
 
-(with migration = Migration.run)
 actor {
   type PriceResultNat = { #completed : { value : Nat } };
   type AssetSymbol = Text;
+  type Metrics = {
+    price : Float;
+    volume24h : Float;
+    marketCap : Float;
+  };
 
   public shared ({ caller }) func swapTokens(_fromToken : AssetSymbol, _toToken : AssetSymbol, amount : Nat) : async PriceResultNat {
     #completed { value = amount };
@@ -33,6 +37,40 @@ actor {
       principal;
       balance;
       percentage = calculateTokenPercentage(balance);
+    };
+  };
+
+  public query ({ caller }) func transform(input : OutCall.TransformationInput) : async OutCall.TransformationOutput {
+    OutCall.transform(input);
+  };
+
+  func getLivePriceUSD() : async Float {
+    0.000004;
+  };
+
+  func getMarketCapUSD() : async Float {
+    let price = await getLivePriceUSD();
+    let totalSupply = 999_999_999.92 : Float;
+    price * totalSupply;
+  };
+
+  func getVolumeUSD() : async Float {
+    23.96;
+  };
+
+  public shared ({ caller }) func getMetrics() : async {
+    price : Float;
+    volume24h : Float;
+    marketCap : Float;
+  } {
+    let price = await getLivePriceUSD();
+    let marketCap = await getMarketCapUSD();
+    let volume = await getVolumeUSD();
+
+    {
+      price;
+      volume24h = volume;
+      marketCap;
     };
   };
 

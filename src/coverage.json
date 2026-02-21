@@ -1,89 +1,74 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-21T19:32:22.154Z",
+  "generatedAt": "2026-02-21T21:32:18.922Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
     "total": 7,
-    "implemented": 2,
+    "implemented": 0,
     "items": [
       {
-        "id": "REQ-40",
-        "summary": "Implement one-time historical backfill at canister deployment/upgrade that fetches all historical transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai using ICRC-2 standard to build the complete transaction history from the token's inception",
+        "id": "REQ-67",
+        "summary": "Implement robust historical backfill in backend that fetches ALL transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai since the token's inception using ICRC-2 standard, processing transactions in batches to handle the complete transaction history efficiently",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-41",
-        "summary": "Create separate stable storage for complete holder list maintaining addresses, BITTYICP balances, and percentage of total supply (999,999,999.92M) for all holders derived from historical and ongoing transaction data",
+        "id": "REQ-68",
+        "summary": "Build comprehensive holder tracking system in backend that analyzes all fetched transactions to identify the complete list of 344 current holders by tracking all transfer events (to/from addresses) and filtering out addresses with zero balances",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-42",
-        "summary": "Update the existing 5-minute polling timer to incrementally update holder balances by processing only new transactions without re-scanning the entire ledger, ensuring efficient ongoing updates",
+        "id": "REQ-69",
+        "summary": "Query live balances for each identified holder address using ICRC-2 icrc1_balance_of method from ledger canister qroj6-lyaaa-aaaam-qeqta-cai to get accurate current balance data, implementing batch queries to handle 344+ addresses efficiently",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-43",
-        "summary": "Maintain the existing rolling window storage of the last 100 transactions in stable memory for transaction history display, independent of the complete holder list compilation",
+        "id": "REQ-70",
+        "summary": "Calculate and store percentage of total supply (999,999,999.92M BITTYICP) held by each address in the holder data structure, storing holder records with address, balance, and supply percentage in stable memory",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-44",
-        "summary": "Compile holder list by analyzing all transactions (both from historical backfill and ongoing indexing) to identify unique holder addresses, calculate current balances using ICRC-2 icrc1_balance_of method, and compute percentage of total supply",
+        "id": "REQ-71",
+        "summary": "Fix the existing 5-minute polling timer in backend to maintain holder data going forward with incremental updates, processing only new transactions since the last poll to update holder balances efficiently without re-scanning the entire ledger",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
       },
       {
-        "id": "REQ-45",
-        "summary": "Update frontend HolderList component and useHolderData hook to fetch and display the complete holder list from the backend, showing all historical holders rather than only holders from transactions indexed since deployment",
-        "status": "implemented",
+        "id": "REQ-72",
+        "summary": "Add comprehensive error handling and logging throughout the backend indexing system including historical backfill, balance queries, timer execution, and holder compilation to capture failures and provide visibility into the indexing process status",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-73",
+        "summary": "Update frontend HolderList component and useHolderData hook to properly fetch and display the complete holder list from the fixed backend, showing all 344 holders with their addresses, BITTYICP balances, and percentage of total supply in the table",
+        "status": "missing",
         "plannedFiles": [
           "frontend/src/hooks/useHolderData.ts",
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/HolderList.tsx"
+          "frontend/src/components/HolderList.tsx",
+          "frontend/src/hooks/useQueries.ts"
         ],
-        "matchedFiles": [
-          "frontend/src/hooks/useHolderData.ts",
-          "frontend/src/hooks/useQueries.ts",
-          "frontend/src/components/HolderList.tsx"
-        ]
-      },
-      {
-        "id": "REQ-46",
-        "summary": "Update the 'Backend Indexing In Progress' banner message in App.tsx to accurately reflect that historical backfill has completed and ongoing indexing is active, removing the misleading 'currently being configured' language",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/App.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/App.tsx"
-        ]
+        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
-    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/components/HolderList.tsx",
-    "frontend/src/hooks/useHolderData.ts",
-    "frontend/src/hooks/useQueries.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

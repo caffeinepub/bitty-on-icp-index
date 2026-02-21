@@ -95,16 +95,40 @@ export type PriceResultNat = {
         value: bigint;
     };
 };
+export interface TransformationOutput {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
+export interface TransformationInput {
+    context: Uint8Array;
+    response: http_request_result;
+}
+export type AssetSymbol = string;
 export interface HolderInfo {
     principal: Principal;
     balance: bigint;
     percentage: number;
 }
-export type AssetSymbol = string;
+export interface http_header {
+    value: string;
+    name: string;
+}
+export interface http_request_result {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
 export interface backendInterface {
     getHolderAddress(_address: Principal): Promise<HolderInfo>;
+    getMetrics(): Promise<{
+        marketCap: number;
+        volume24h: number;
+        price: number;
+    }>;
     getUniqueHolderAddresses(): Promise<Array<HolderInfo>>;
     swapTokens(_fromToken: AssetSymbol, _toToken: AssetSymbol, amount: bigint): Promise<PriceResultNat>;
+    transform(input: TransformationInput): Promise<TransformationOutput>;
     validateAddress(_address: Uint8Array): Promise<boolean>;
 }
 import type { PriceResultNat as _PriceResultNat } from "./declarations/backend.did.d.ts";
@@ -121,6 +145,24 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getHolderAddress(arg0);
+            return result;
+        }
+    }
+    async getMetrics(): Promise<{
+        marketCap: number;
+        volume24h: number;
+        price: number;
+    }> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getMetrics();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getMetrics();
             return result;
         }
     }
@@ -150,6 +192,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.swapTokens(arg0, arg1, arg2);
             return from_candid_PriceResultNat_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async transform(arg0: TransformationInput): Promise<TransformationOutput> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.transform(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.transform(arg0);
+            return result;
         }
     }
     async validateAddress(arg0: Uint8Array): Promise<boolean> {

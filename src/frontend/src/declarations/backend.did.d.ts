@@ -17,13 +17,33 @@ export interface HolderInfo {
   'percentage' : number,
 }
 export type PriceResultNat = { 'completed' : { 'value' : bigint } };
+export interface TransformationInput {
+  'context' : Uint8Array,
+  'response' : http_request_result,
+}
+export interface TransformationOutput {
+  'status' : bigint,
+  'body' : Uint8Array,
+  'headers' : Array<http_header>,
+}
+export interface http_header { 'value' : string, 'name' : string }
+export interface http_request_result {
+  'status' : bigint,
+  'body' : Uint8Array,
+  'headers' : Array<http_header>,
+}
 export interface _SERVICE {
   'getHolderAddress' : ActorMethod<[Principal], HolderInfo>,
+  'getMetrics' : ActorMethod<
+    [],
+    { 'marketCap' : number, 'volume24h' : number, 'price' : number }
+  >,
   'getUniqueHolderAddresses' : ActorMethod<[], Array<HolderInfo>>,
   'swapTokens' : ActorMethod<
     [AssetSymbol, AssetSymbol, bigint],
     PriceResultNat
   >,
+  'transform' : ActorMethod<[TransformationInput], TransformationOutput>,
   'validateAddress' : ActorMethod<[Uint8Array], boolean>,
 }
 export declare const idlService: IDL.ServiceClass;

@@ -1,45 +1,4 @@
 {
   "kind": "feature_evidence_report",
-  "features": [
-    {
-      "featureId": "feature-update-frontend-holderlist-component-and-useholderdata-hook-to-fetch-and-display-the-complete-holder-list-from-the-backend-showing-all-historical-holders-rather-than-only-holders-from-transactions-indexed-since-deployment",
-      "featureTitle": "Update frontend HolderList component and useHolderData hook to fetch and display the complete holder list from the backend, showing all historical holders rather than only holders from transactions indexed since deployment",
-      "files": [
-        "frontend/src/components/HolderList.tsx",
-        "frontend/src/hooks/useHolderData.ts",
-        "frontend/src/hooks/useQueries.ts"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "http-outcalls@3.0.0"
-      ],
-      "testIds": [
-        "REQ-45"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-backend-indexing-in-progress-banner-message-in-app-tsx-to-accurately-reflect-that-historical-backfill-has-completed-and-ongoing-indexing-is-active-removing-the-misleading-currently-being-configured-language",
-      "featureTitle": "Update the 'Backend Indexing In Progress' banner message in App.tsx to accurately reflect that historical backfill has completed and ongoing indexing is active, removing the misleading 'currently being configured' language",
-      "files": [
-        "frontend/src/App.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "http-outcalls@3.0.0"
-      ],
-      "testIds": [
-        "REQ-46"
-      ],
-      "confidence": "high"
-    }
-  ]
+  "features": []
 }

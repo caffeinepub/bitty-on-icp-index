@@ -20,7 +20,7 @@ export function AnimatedCoin() {
       <img
         src="/assets/IMG_4570.jpeg"
         alt="BITTY Coin"
-        className={`w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full object-cover shadow-2xl border-4 border-amber-500/30 ${
+        className={`w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full object-cover shadow-2xl border-4 border-amber-500/30 ${
           isAnimating ? 'coin-roll' : ''
         }`}
       />
