@@ -3,6 +3,7 @@ import { SupplyMetrics } from './components/SupplyMetrics';
 import { TokenMetrics } from './components/TokenMetrics';
 import { NavigationTabs } from './components/NavigationTabs';
 import { HolderList } from './components/HolderList';
+import { TransactionList } from './components/TransactionList';
 import { VideoSection } from './components/VideoSection';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -69,6 +70,11 @@ export default function App() {
         {/* Token Holders */}
         <section className="mb-8">
           <HolderList />
+        </section>
+
+        {/* Transaction List */}
+        <section className="mb-8">
+          <TransactionList />
         </section>
       </main>
 

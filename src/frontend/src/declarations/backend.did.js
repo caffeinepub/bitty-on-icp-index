@@ -13,7 +13,27 @@ export const HolderInfo = IDL.Record({
   'balance' : IDL.Nat,
   'percentage' : IDL.Float64,
 });
+export const IndexedHolderData = IDL.Record({
+  'principal' : IDL.Principal,
+  'balance' : IDL.Nat,
+  'percentage' : IDL.Float64,
+});
+export const CompleteHolderList = IDL.Record({
+  'account_principal_mapping' : IDL.Vec(
+    IDL.Tuple(IDL.Vec(IDL.Nat8), IDL.Principal)
+  ),
+  'holders' : IDL.Vec(IndexedHolderData),
+});
 export const AssetSymbol = IDL.Text;
+export const Transaction = IDL.Record({
+  'to' : IDL.Principal,
+  'fee' : IDL.Record({ 'asset_symbol' : AssetSymbol, 'amount' : IDL.Nat }),
+  'status' : IDL.Text,
+  'from' : IDL.Principal,
+  'txid' : IDL.Text,
+  'block_timestamp' : IDL.Nat64,
+  'amount' : IDL.Nat,
+});
 export const PriceResultNat = IDL.Variant({
   'completed' : IDL.Record({ 'value' : IDL.Nat }),
 });
@@ -38,6 +58,8 @@ export const TransformationOutput = IDL.Record({
 
 export const idlService = IDL.Service({
   'getHolderAddress' : IDL.Func([IDL.Principal], [HolderInfo], []),
+  'getHolderData' : IDL.Func([], [CompleteHolderList], ['query']),
+  'getIndexedTransactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
   'getMetrics' : IDL.Func(
       [],
       [
@@ -71,7 +93,27 @@ export const idlFactory = ({ IDL }) => {
     'balance' : IDL.Nat,
     'percentage' : IDL.Float64,
   });
+  const IndexedHolderData = IDL.Record({
+    'principal' : IDL.Principal,
+    'balance' : IDL.Nat,
+    'percentage' : IDL.Float64,
+  });
+  const CompleteHolderList = IDL.Record({
+    'account_principal_mapping' : IDL.Vec(
+      IDL.Tuple(IDL.Vec(IDL.Nat8), IDL.Principal)
+    ),
+    'holders' : IDL.Vec(IndexedHolderData),
+  });
   const AssetSymbol = IDL.Text;
+  const Transaction = IDL.Record({
+    'to' : IDL.Principal,
+    'fee' : IDL.Record({ 'asset_symbol' : AssetSymbol, 'amount' : IDL.Nat }),
+    'status' : IDL.Text,
+    'from' : IDL.Principal,
+    'txid' : IDL.Text,
+    'block_timestamp' : IDL.Nat64,
+    'amount' : IDL.Nat,
+  });
   const PriceResultNat = IDL.Variant({
     'completed' : IDL.Record({ 'value' : IDL.Nat }),
   });
@@ -93,6 +135,8 @@ export const idlFactory = ({ IDL }) => {
   
   return IDL.Service({
     'getHolderAddress' : IDL.Func([IDL.Principal], [HolderInfo], []),
+    'getHolderData' : IDL.Func([], [CompleteHolderList], ['query']),
+    'getIndexedTransactions' : IDL.Func([], [IDL.Vec(Transaction)], ['query']),
     'getMetrics' : IDL.Func(
         [],
         [

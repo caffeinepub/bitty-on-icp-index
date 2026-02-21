@@ -1,15 +1,14 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the holder data system to accurately display all 344 BITTYICP token holders by implementing historical transaction backfill and robust ongoing indexing from the ledger canister.
+**Goal:** Fix the missing TransactionList and HolderList component rendering to display transaction history and holder data on the page.
 
 **Planned changes:**
-- Implement historical backfill in backend to fetch all transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai since token inception using ICRC-2 standard
-- Build holder tracking system that analyzes all transactions to identify complete list of holders by tracking transfer events
-- Query live balances for each holder address using icrc1_balance_of method with batch processing for 344+ addresses
-- Calculate and store percentage of total supply (999,999,999.92M BITTYICP) for each holder in stable memory
-- Fix existing 5-minute polling timer to maintain holder data with incremental updates processing only new transactions
-- Add comprehensive error handling and logging throughout indexing system for historical backfill, balance queries, and timer execution
-- Update frontend HolderList component and useHolderData hook to fetch and display complete holder list with addresses, balances, and supply percentages
+- Restore TransactionList component implementation to fetch and display last 100 transactions with pagination (25 per page)
+- Implement useTransactions hook using React Query to fetch data from backend getIndexedTransactions method
+- Add TransactionList component to App.tsx below indexing status alert and above VideoSection
+- Debug and fix HolderList component rendering to display holder data with address, balance, and percentage columns
+- Verify backend getIndexedTransactions method exists and returns correct transaction data format
+- Verify backend getHolderData method exists and returns complete holder list data in correct format
 
-**User-visible outcome:** The holder list page displays all 344 authentic BITTYICP token holders with their current balances and percentage of total supply, automatically staying up-to-date through 5-minute polling.
+**User-visible outcome:** Users will see the transaction history table displaying recent transactions with pagination controls and the holder list showing all token holders with their balances and ownership percentages.

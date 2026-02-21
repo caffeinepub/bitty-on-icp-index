@@ -1,33 +1,85 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix holder data system frontend display",
+  "title": "Fix missing TransactionList and HolderList component rendering",
   "requirements": [
     {
-      "id": "REQ-73",
-      "summary": "Update frontend HolderList component and useHolderData hook to properly fetch and display the complete holder list from the fixed backend",
+      "id": "REQ-74",
+      "summary": "Restore the TransactionList component to render the last 100 transactions with pagination (25 per page) fetched from the backend getIndexedTransactions method",
       "acceptanceCriteria": [
-        "HolderList component displays all 344 holders fetched from backend",
-        "Table shows address, balance in BITTYICP, and percentage of total supply for each holder",
-        "useHolderData hook successfully queries backend getHolderData method",
-        "Loading states display while fetching holder data",
-        "Error states are cleared once data loads successfully"
+        "TransactionList component file contains implementation to fetch and display transactions",
+        "Component renders a table or list showing transaction data with columns for relevant fields (from/to addresses, amount, timestamp)",
+        "Pagination controls display 25 transactions per page with ability to navigate between pages",
+        "Component uses the useTransactions hook or equivalent to fetch data from backend getIndexedTransactions method",
+        "Component appears on the page below the indexing status alert"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useHolderData.ts",
+          "path": "frontend/src/components/TransactionList.tsx",
           "operation": "modify",
-          "description": "Update the useHolderData hook to properly call the backend getUniqueHolderAddresses method which returns the complete holder list. Ensure the hook correctly maps the HolderInfo array response containing principal, balance, and percentage fields. Verify error handling captures any backend query failures and that loading states properly reflect the async query status."
-        },
+          "description": "Implement TransactionList component to display transactions in a table with pagination. Create a card component that fetches transaction data using the useTransactions hook, displays it in a sortable table with columns for transaction ID, from address, to address, amount, fee, status, and timestamp. Include pagination controls to show 25 transactions per page. Apply the gold-themed styling consistent with HolderList component. Handle loading and error states gracefully."
+        }
+      ]
+    },
+    {
+      "id": "REQ-75",
+      "summary": "Implement the useTransactions hook to fetch transaction data from the backend getIndexedTransactions method using React Query",
+      "acceptanceCriteria": [
+        "Hook file contains implementation that uses React Query to call backend actor's getIndexedTransactions method",
+        "Hook returns transaction data, loading state, and error state",
+        "Hook includes appropriate refetch interval to keep transaction data updated",
+        "Hook handles pagination state if needed for the 25 transactions per page requirement"
+      ],
+      "file_operations": [
         {
-          "path": "frontend/src/components/HolderList.tsx",
+          "path": "frontend/src/hooks/useTransactions.ts",
           "operation": "modify",
-          "description": "Update the HolderList component to display all holder data fields from the useHolderData hook including principal address (formatted for display), balance in BITTYICP tokens (formatted with appropriate decimal places), and percentage of total supply. Ensure the table continues to sort by balance in descending order. Verify loading skeleton states display during initial fetch and that error states are properly cleared when data successfully loads. Update empty state messaging to reflect when zero holders are returned versus when data is loading."
+          "description": "Implement useTransactions hook that wraps the useGetIndexedTransactions query hook. Returns transaction data array, loading state, and error state. The hook should enable automatic refetching at regular intervals (e.g., every 30 seconds) to keep transaction data fresh. Include basic error handling for failed queries."
         },
         {
           "path": "frontend/src/hooks/useQueries.ts",
           "operation": "modify",
-          "description": "Update the useGetHolderData query hook to call the correct backend method getUniqueHolderAddresses which returns Array<HolderInfo>. Ensure the query key is correctly configured and that the 5-minute refetch interval continues to work. Verify that the actor dependency is properly tracked so queries refetch when authentication state changes."
+          "description": "Add a new React Query hook called useGetIndexedTransactions that calls actor.getIndexedTransactions() method. Configure it with appropriate staleTime and refetchInterval settings (similar to existing useGetHolderData hook pattern). This hook should return the transaction array from the backend and handle the query key invalidation when the actor changes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-76",
+      "summary": "Add the TransactionList component to the App.tsx component below the indexing status alert and above the VideoSection component",
+      "acceptanceCriteria": [
+        "TransactionList component is imported in App.tsx",
+        "Component is rendered in the JSX structure positioned after the indexing alert and before the VideoSection",
+        "Component receives proper styling and spacing to maintain visual consistency with other sections"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Import TransactionList component at the top of the file. Insert the TransactionList component in the JSX structure after the indexing status alert (the yellow alert about indexing) and before the VideoSection component. Wrap it in appropriate spacing/container div to maintain consistent spacing with other sections on the page."
+        }
+      ]
+    },
+    {
+      "id": "REQ-77",
+      "summary": "Debug and fix the HolderList component rendering issue to ensure it displays on the page with the fetched holder data from the backend",
+      "acceptanceCriteria": [
+        "HolderList component is properly imported and rendered in App.tsx",
+        "Component successfully fetches data using the useHolderData hook",
+        "Component displays holder table with columns for address, balance, and percentage of total supply",
+        "Component shows appropriate loading states while fetching data",
+        "Component handles error states gracefully if data fetch fails",
+        "Component appears on the page in its designated position"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Verify that HolderList component is properly imported and rendered in the JSX. Check that it is positioned correctly in the component tree and not accidentally hidden by CSS or conditional rendering logic. Ensure the component receives proper spacing and layout. If the component is missing from the render tree, add it back in the appropriate position with proper container styling."
+        },
+        {
+          "path": "frontend/src/components/HolderList.tsx",
+          "operation": "modify",
+          "description": "Review and fix any rendering issues in the HolderList component. Verify that the useHolderData hook is called correctly and that loading/error states are handled properly. Ensure the component renders the table structure correctly with proper mapping over the holders array. Check that the sorting logic works and that percentage calculations display correctly. Fix any console errors or warnings that might prevent rendering."
         }
       ]
     }

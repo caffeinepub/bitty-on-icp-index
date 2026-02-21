@@ -3,6 +3,7 @@ import List "mo:core/List";
 import Float "mo:core/Float";
 import Principal "mo:core/Principal";
 import OutCall "http-outcalls/outcall";
+import Blob "mo:core/Blob";
 
 actor {
   type PriceResultNat = { #completed : { value : Nat } };
@@ -115,6 +116,60 @@ actor {
       principal = Principal.fromText("qld7o-6wtos-xvt7x-iqrgp-2hut4-jysmw-ukmwm-dedk4-t4iy2-wshe6-wqe");
       balance = 999_999_999_920_000;
       percentage = 100.0;
+    };
+  };
+
+  type Transaction = {
+    txid : Text;
+    status : Text;
+    block_timestamp : Nat64;
+    from : Principal;
+    to : Principal;
+    amount : Nat;
+    fee : { amount : Nat; asset_symbol : AssetSymbol };
+  };
+
+  func createDefaultTransaction() : Transaction {
+    {
+      txid = "";
+      status = "";
+      block_timestamp = 0;
+      from = Principal.fromText("2vxsx-fae");
+      to = Principal.fromText("qld7o-6wtos-xvt7x-iqrgp-2hut4-jysmw-ukmwm-dedk4-t4iy2-wshe6-wqe");
+      amount = 999_999_999_920_000;
+      fee = { amount = 1000_000; asset_symbol = "TLC" };
+    };
+  };
+
+  public query ({ caller }) func getIndexedTransactions() : async [Transaction] {
+    [createDefaultTransaction()];
+  };
+
+  public type IndexedHolderData = {
+    principal : Principal;
+    balance : Nat;
+    percentage : Float;
+  };
+
+  public type CompleteHolderList = {
+    holders : [IndexedHolderData];
+    account_principal_mapping : [(Blob, Principal)];
+  };
+
+  public query ({ caller }) func getHolderData() : async CompleteHolderList {
+    let holders = [({
+      principal = Principal.fromText("qld7o-6wtos-xvt7x-iqrgp-2hut4-jysmw-ukmwm-dedk4-t4iy2-wshe6-wqe");
+      balance = 999_999_999_920_000;
+      percentage = 100.0;
+    })];
+
+    let accountPrincipalMapping = [
+      (Blob.fromArray([68, 69, 70, 65, 85, 76, 84, 95, 65, 67, 67, 79, 85, 78, 84]), Principal.fromText("2vxsx-fae")),
+    ];
+
+    {
+      holders;
+      account_principal_mapping = accountPrincipalMapping;
     };
   };
 };

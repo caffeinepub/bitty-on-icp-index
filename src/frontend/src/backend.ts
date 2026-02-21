@@ -89,6 +89,11 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface http_request_result {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
 export type PriceResultNat = {
     __kind__: "completed";
     completed: {
@@ -105,6 +110,15 @@ export interface TransformationInput {
     response: http_request_result;
 }
 export type AssetSymbol = string;
+export interface IndexedHolderData {
+    principal: Principal;
+    balance: bigint;
+    percentage: number;
+}
+export interface CompleteHolderList {
+    account_principal_mapping: Array<[Uint8Array, Principal]>;
+    holders: Array<IndexedHolderData>;
+}
 export interface HolderInfo {
     principal: Principal;
     balance: bigint;
@@ -114,13 +128,22 @@ export interface http_header {
     value: string;
     name: string;
 }
-export interface http_request_result {
-    status: bigint;
-    body: Uint8Array;
-    headers: Array<http_header>;
+export interface Transaction {
+    to: Principal;
+    fee: {
+        asset_symbol: AssetSymbol;
+        amount: bigint;
+    };
+    status: string;
+    from: Principal;
+    txid: string;
+    block_timestamp: bigint;
+    amount: bigint;
 }
 export interface backendInterface {
     getHolderAddress(_address: Principal): Promise<HolderInfo>;
+    getHolderData(): Promise<CompleteHolderList>;
+    getIndexedTransactions(): Promise<Array<Transaction>>;
     getMetrics(): Promise<{
         marketCap: number;
         volume24h: number;
@@ -145,6 +168,34 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getHolderAddress(arg0);
+            return result;
+        }
+    }
+    async getHolderData(): Promise<CompleteHolderList> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getHolderData();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getHolderData();
+            return result;
+        }
+    }
+    async getIndexedTransactions(): Promise<Array<Transaction>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getIndexedTransactions();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getIndexedTransactions();
             return result;
         }
     }

@@ -1,4 +1,82 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-restore-the-transactionlist-component-in-frontend-src-components-transactionlist-tsx-to-render-the-last-100-transactions-with-pagination-25-per-page-fetched-from-the-backend-getindexedtransactions-method",
+      "featureTitle": "Restore the TransactionList component in frontend/src/components/TransactionList.tsx to render the last 100 transactions with pagination (25 per page) fetched from the backend getIndexedTransactions method",
+      "files": [
+        "frontend/src/components/TransactionList.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-74"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-the-usetransactions-hook-in-frontend-src-hooks-usetransactions-ts-to-fetch-transaction-data-from-the-backend-getindexedtransactions-method-using-react-query",
+      "featureTitle": "Implement the useTransactions hook in frontend/src/hooks/useTransactions.ts to fetch transaction data from the backend getIndexedTransactions method using React Query",
+      "files": [
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/hooks/useTransactions.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-75"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-the-transactionlist-component-to-the-app-tsx-component-below-the-indexing-status-alert-and-above-the-videosection-component",
+      "featureTitle": "Add the TransactionList component to the App.tsx component below the indexing status alert and above the VideoSection component",
+      "files": [
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-76"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-debug-and-fix-the-holderlist-component-rendering-issue-to-ensure-it-displays-on-the-page-with-the-fetched-holder-data-from-the-backend",
+      "featureTitle": "Debug and fix the HolderList component rendering issue to ensure it displays on the page with the fetched holder data from the backend",
+      "files": [
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "http-outcalls@3.0.0"
+      ],
+      "testIds": [
+        "REQ-77"
+      ],
+      "confidence": "high"
+    }
+  ]
 }

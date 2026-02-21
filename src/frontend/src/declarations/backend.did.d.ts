@@ -11,12 +11,30 @@ import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
 export type AssetSymbol = string;
+export interface CompleteHolderList {
+  'account_principal_mapping' : Array<[Uint8Array, Principal]>,
+  'holders' : Array<IndexedHolderData>,
+}
 export interface HolderInfo {
   'principal' : Principal,
   'balance' : bigint,
   'percentage' : number,
 }
+export interface IndexedHolderData {
+  'principal' : Principal,
+  'balance' : bigint,
+  'percentage' : number,
+}
 export type PriceResultNat = { 'completed' : { 'value' : bigint } };
+export interface Transaction {
+  'to' : Principal,
+  'fee' : { 'asset_symbol' : AssetSymbol, 'amount' : bigint },
+  'status' : string,
+  'from' : Principal,
+  'txid' : string,
+  'block_timestamp' : bigint,
+  'amount' : bigint,
+}
 export interface TransformationInput {
   'context' : Uint8Array,
   'response' : http_request_result,
@@ -34,6 +52,8 @@ export interface http_request_result {
 }
 export interface _SERVICE {
   'getHolderAddress' : ActorMethod<[Principal], HolderInfo>,
+  'getHolderData' : ActorMethod<[], CompleteHolderList>,
+  'getIndexedTransactions' : ActorMethod<[], Array<Transaction>>,
   'getMetrics' : ActorMethod<
     [],
     { 'marketCap' : number, 'volume24h' : number, 'price' : number }

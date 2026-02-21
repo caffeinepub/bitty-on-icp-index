@@ -1,74 +1,93 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-21T21:32:18.922Z",
+  "generatedAt": "2026-02-21T21:59:33.527Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 7,
-    "implemented": 0,
+    "total": 6,
+    "implemented": 4,
     "items": [
       {
-        "id": "REQ-67",
-        "summary": "Implement robust historical backfill in backend that fetches ALL transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai since the token's inception using ICRC-2 standard, processing transactions in batches to handle the complete transaction history efficiently",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-68",
-        "summary": "Build comprehensive holder tracking system in backend that analyzes all fetched transactions to identify the complete list of 344 current holders by tracking all transfer events (to/from addresses) and filtering out addresses with zero balances",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-69",
-        "summary": "Query live balances for each identified holder address using ICRC-2 icrc1_balance_of method from ledger canister qroj6-lyaaa-aaaam-qeqta-cai to get accurate current balance data, implementing batch queries to handle 344+ addresses efficiently",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-70",
-        "summary": "Calculate and store percentage of total supply (999,999,999.92M BITTYICP) held by each address in the holder data structure, storing holder records with address, balance, and supply percentage in stable memory",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-71",
-        "summary": "Fix the existing 5-minute polling timer in backend to maintain holder data going forward with incremental updates, processing only new transactions since the last poll to update holder balances efficiently without re-scanning the entire ledger",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-72",
-        "summary": "Add comprehensive error handling and logging throughout the backend indexing system including historical backfill, balance queries, timer execution, and holder compilation to capture failures and provide visibility into the indexing process status",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-73",
-        "summary": "Update frontend HolderList component and useHolderData hook to properly fetch and display the complete holder list from the fixed backend, showing all 344 holders with their addresses, BITTYICP balances, and percentage of total supply in the table",
-        "status": "missing",
+        "id": "REQ-74",
+        "summary": "Restore the TransactionList component in frontend/src/components/TransactionList.tsx to render the last 100 transactions with pagination (25 per page) fetched from the backend getIndexedTransactions method",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useHolderData.ts",
-          "frontend/src/components/HolderList.tsx",
+          "frontend/src/components/TransactionList.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/TransactionList.tsx"
+        ]
+      },
+      {
+        "id": "REQ-75",
+        "summary": "Implement the useTransactions hook in frontend/src/hooks/useTransactions.ts to fetch transaction data from the backend getIndexedTransactions method using React Query",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useTransactions.ts",
           "frontend/src/hooks/useQueries.ts"
         ],
+        "matchedFiles": [
+          "frontend/src/hooks/useTransactions.ts",
+          "frontend/src/hooks/useQueries.ts"
+        ]
+      },
+      {
+        "id": "REQ-76",
+        "summary": "Add the TransactionList component to the App.tsx component below the indexing status alert and above the VideoSection component",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-77",
+        "summary": "Debug and fix the HolderList component rendering issue to ensure it displays on the page with the fetched holder data from the backend",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/components/HolderList.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-78",
+        "summary": "Verify the backend getIndexedTransactions method exists and returns transaction data in the correct format expected by the frontend TransactionList component",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-79",
+        "summary": "Verify the backend getHolderData method exists and returns complete holder list data in the correct format expected by the frontend HolderList component",
+        "status": "unknown",
+        "plannedFiles": [],
         "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
+    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/TransactionList.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useHolderData.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/hooks/useTransactions.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

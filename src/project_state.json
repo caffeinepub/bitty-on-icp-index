@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 31,
+  "projectStateVersion": 33,
   "summary": "BITTY ON ICP INDEX - A blockchain explorer/index for the BITTY ON ICP meme token. Integrates with ledger canister qroj6-lyaaa-aaaam-qeqta-cai (ICRC-2 standard) and ICPSwap pool canister wkyqn-qqaaa-aaaar-qbyxq-cai for live price data. Features: transaction history (last 100, paginated 25 per page) with continuous indexing (polls every 5 minutes, stores from deployment forward), address search with balance lookup, live ICP price per token (format: '1 BITTYICP = < 0.00001 ICP'), supply metrics (999,999,999.92M total/circulating), 2D animated BITTY coin with rolling animation using CSS (rolls across screen in 5 seconds, stops at center for 5 seconds, repeats), and holder section displaying all holders with balances and percentage of total supply held (compiled from transaction history analysis).",
   "architectural_notes": [
     "Ledger canister: qroj6-lyaaa-aaaam-qeqta-cai (ICRC-2 standard)",
@@ -15,7 +15,7 @@
     "Historical backfill runs once at deployment/upgrade to fetch all ledger transactions and populate initial holder list"
   ],
   "known_issues": [
-    "Address search functionality not returning balance results for queried addresses"
+    "TransactionList and HolderList components not rendering on page - only indexing banner visible"
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -360,6 +360,38 @@
       "title": "Implement or fix the address search functionality in the AddressSearch component to query balances from ledger canister qroj6-lyaaa-aaaam-qeqta-cai using ICRC-2 icrc1_balance_of method and display results",
       "reqIds": [
         "REQ-64"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-restore-the-transactionlist-component-in-frontend-src-components-transactionlist-tsx-to-render-the-last-100-transactions-with-pagination-25-per-page-fetched-from-the-backend-getindexedtransactions-method",
+      "title": "Restore the TransactionList component in frontend/src/components/TransactionList.tsx to render the last 100 transactions with pagination (25 per page) fetched from the backend getIndexedTransactions method",
+      "reqIds": [
+        "REQ-74"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-usetransactions-hook-in-frontend-src-hooks-usetransactions-ts-to-fetch-transaction-data-from-the-backend-getindexedtransactions-method-using-react-query",
+      "title": "Implement the useTransactions hook in frontend/src/hooks/useTransactions.ts to fetch transaction data from the backend getIndexedTransactions method using React Query",
+      "reqIds": [
+        "REQ-75"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-transactionlist-component-to-the-app-tsx-component-below-the-indexing-status-alert-and-above-the-videosection-component",
+      "title": "Add the TransactionList component to the App.tsx component below the indexing status alert and above the VideoSection component",
+      "reqIds": [
+        "REQ-76"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-debug-and-fix-the-holderlist-component-rendering-issue-to-ensure-it-displays-on-the-page-with-the-fetched-holder-data-from-the-backend",
+      "title": "Debug and fix the HolderList component rendering issue to ensure it displays on the page with the fetched holder data from the backend",
+      "reqIds": [
+        "REQ-77"
       ],
       "version": 1
     }
@@ -730,6 +762,22 @@
       "summary": "Update frontend HolderList component and useHolderData hook to properly fetch and display the complete holder list from the fixed backend, showing all 344 holders with their addresses, BITTYICP balances, and percentage of total supply in the table",
       "reqIds": [
         "REQ-73"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-79",
+      "summary": "Verify the backend getIndexedTransactions method exists and returns transaction data in the correct format expected by the frontend TransactionList component",
+      "reqIds": [
+        "REQ-78"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-80",
+      "summary": "Verify the backend getHolderData method exists and returns complete holder list data in the correct format expected by the frontend HolderList component",
+      "reqIds": [
+        "REQ-79"
       ],
       "status": "pending"
     }

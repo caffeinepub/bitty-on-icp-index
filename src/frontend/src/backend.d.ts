@@ -7,6 +7,11 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
+export interface http_request_result {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
+}
 export type PriceResultNat = {
     __kind__: "completed";
     completed: {
@@ -23,6 +28,15 @@ export interface TransformationInput {
     response: http_request_result;
 }
 export type AssetSymbol = string;
+export interface IndexedHolderData {
+    principal: Principal;
+    balance: bigint;
+    percentage: number;
+}
+export interface CompleteHolderList {
+    account_principal_mapping: Array<[Uint8Array, Principal]>;
+    holders: Array<IndexedHolderData>;
+}
 export interface HolderInfo {
     principal: Principal;
     balance: bigint;
@@ -32,13 +46,22 @@ export interface http_header {
     value: string;
     name: string;
 }
-export interface http_request_result {
-    status: bigint;
-    body: Uint8Array;
-    headers: Array<http_header>;
+export interface Transaction {
+    to: Principal;
+    fee: {
+        asset_symbol: AssetSymbol;
+        amount: bigint;
+    };
+    status: string;
+    from: Principal;
+    txid: string;
+    block_timestamp: bigint;
+    amount: bigint;
 }
 export interface backendInterface {
     getHolderAddress(_address: Principal): Promise<HolderInfo>;
+    getHolderData(): Promise<CompleteHolderList>;
+    getIndexedTransactions(): Promise<Array<Transaction>>;
     getMetrics(): Promise<{
         marketCap: number;
         volume24h: number;

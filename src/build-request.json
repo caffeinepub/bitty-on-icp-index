@@ -1,158 +1,142 @@
 {
   "kind": "build_request",
-  "title": "Fix holder data system with historical backfill and ongoing indexing",
+  "title": "Fix missing TransactionList and HolderList component rendering",
   "projectName": "BITTY ON ICP INDEX",
   "priority": "high",
   "requirements": [
     {
-      "id": "REQ-67",
-      "text": "Implement robust historical backfill in backend that fetches ALL transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai since the token's inception using ICRC-2 standard, processing transactions in batches to handle the complete transaction history efficiently",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "Implement robust historical backfill that fetches ALL transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai since the token's inception"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend fetches all historical transactions from ledger canister qroj6-lyaaa-aaaam-qeqta-cai using ICRC-2 icrc3_get_blocks method",
-        "Historical backfill executes automatically on canister deployment/upgrade",
-        "Transaction processing handles batches efficiently to avoid timeout issues",
-        "All transactions from token launch to present are stored in stable memory"
-      ]
-    },
-    {
-      "id": "REQ-68",
-      "text": "Build comprehensive holder tracking system in backend that analyzes all fetched transactions to identify the complete list of 344 current holders by tracking all transfer events (to/from addresses) and filtering out addresses with zero balances",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "Build a comprehensive holder tracking system that analyzes these transactions to identify all 344 current holders"
-        ]
-      },
-      "acceptanceCriteria": [
-        "System analyzes all transactions to extract unique holder addresses",
-        "Holder compilation tracks both sender and recipient addresses from transfer events",
-        "System identifies all 344 holders matching ICPSwap pool data",
-        "Addresses with zero balance are excluded from the holder list"
-      ]
-    },
-    {
-      "id": "REQ-69",
-      "text": "Query live balances for each identified holder address using ICRC-2 icrc1_balance_of method from ledger canister qroj6-lyaaa-aaaam-qeqta-cai to get accurate current balance data, implementing batch queries to handle 344+ addresses efficiently",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "Query live balances for each holder using ICRC-2 icrc1_balance_of to get accurate current data"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend queries icrc1_balance_of for each holder address from ledger canister qroj6-lyaaa-aaaam-qeqta-cai",
-        "Balance queries handle 344+ addresses efficiently using batch processing",
-        "Live balance data is accurate and reflects current token holdings",
-        "Zero balance addresses are filtered out of the final holder list"
-      ]
-    },
-    {
-      "id": "REQ-70",
-      "text": "Calculate and store percentage of total supply (999,999,999.92M BITTYICP) held by each address in the holder data structure, storing holder records with address, balance, and supply percentage in stable memory",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "all 344 holders who still hold tokens from launch, with their balances and percentage of total supply"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Each holder record includes address, balance in BITTYICP tokens, and percentage of total supply",
-        "Supply percentage calculation uses 999,999,999.92M as total supply",
-        "Holder data is stored in stable memory for persistence across upgrades",
-        "Holder list is sorted by balance in descending order"
-      ]
-    },
-    {
-      "id": "REQ-71",
-      "text": "Fix the existing 5-minute polling timer in backend to maintain holder data going forward with incremental updates, processing only new transactions since the last poll to update holder balances efficiently without re-scanning the entire ledger",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "Set up the 5-minute polling timer to maintain this data going forward with incremental updates"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Polling timer executes every 5 minutes (300 seconds) using Internet Computer timer API",
-        "Timer fetches only new transactions since last poll using transaction index tracking",
-        "Holder balances are updated incrementally based on new transfer events",
-        "Timer continues running after historical backfill completes"
-      ]
-    },
-    {
-      "id": "REQ-72",
-      "text": "Add comprehensive error handling and logging throughout the backend indexing system including historical backfill, balance queries, timer execution, and holder compilation to capture failures and provide visibility into the indexing process status",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "Add proper error handling and logging so you can see what's happening in the indexing process"
-        ]
-      },
-      "acceptanceCriteria": [
-        "All ledger canister queries include error handling with meaningful error messages",
-        "Historical backfill logs progress (transactions fetched, holders identified)",
-        "Timer execution logs each poll attempt with success/failure status",
-        "Balance query failures are logged with address and error details",
-        "Backend exposes indexing status query for frontend to display progress"
-      ]
-    },
-    {
-      "id": "REQ-73",
-      "text": "Update frontend HolderList component and useHolderData hook to properly fetch and display the complete holder list from the fixed backend, showing all 344 holders with their addresses, BITTYICP balances, and percentage of total supply in the table",
+      "id": "REQ-74",
+      "text": "Restore the TransactionList component in frontend/src/components/TransactionList.tsx to render the last 100 transactions with pagination (25 per page) fetched from the backend getIndexedTransactions method",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-last"
         ],
         "quotes": [
-          "I have a total of 344 authentic addresses right now according to ICPSwap pool. Right now my page shows 0 addresses and balances"
+          "No components are there just a warning",
+          "the transaction section isn't showing"
         ]
       },
       "acceptanceCriteria": [
-        "HolderList component displays all 344 holders fetched from backend",
-        "Table shows address, balance in BITTYICP, and percentage of total supply for each holder",
-        "useHolderData hook successfully queries backend getHolderData method",
-        "Loading states display while fetching holder data",
-        "Error states are cleared once data loads successfully"
+        "TransactionList component file contains implementation to fetch and display transactions",
+        "Component renders a table or list showing transaction data with columns for relevant fields (from/to addresses, amount, timestamp)",
+        "Pagination controls display 25 transactions per page with ability to navigate between pages",
+        "Component uses the useTransactions hook or equivalent to fetch data from backend getIndexedTransactions method",
+        "Component appears on the page below the indexing status alert"
+      ]
+    },
+    {
+      "id": "REQ-75",
+      "text": "Implement the useTransactions hook in frontend/src/hooks/useTransactions.ts to fetch transaction data from the backend getIndexedTransactions method using React Query",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "the transaction section isn't showing"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hook file contains implementation that uses React Query to call backend actor's getIndexedTransactions method",
+        "Hook returns transaction data, loading state, and error state",
+        "Hook includes appropriate refetch interval to keep transaction data updated",
+        "Hook handles pagination state if needed for the 25 transactions per page requirement"
+      ]
+    },
+    {
+      "id": "REQ-76",
+      "text": "Add the TransactionList component to the App.tsx component below the indexing status alert and above the VideoSection component",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "No components are there just a warning"
+        ]
+      },
+      "acceptanceCriteria": [
+        "TransactionList component is imported in App.tsx",
+        "Component is rendered in the JSX structure positioned after the indexing alert and before the VideoSection",
+        "Component receives proper styling and spacing to maintain visual consistency with other sections"
+      ]
+    },
+    {
+      "id": "REQ-77",
+      "text": "Debug and fix the HolderList component rendering issue to ensure it displays on the page with the fetched holder data from the backend",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "No components are there just a warning",
+          "no holders"
+        ]
+      },
+      "acceptanceCriteria": [
+        "HolderList component is properly imported and rendered in App.tsx",
+        "Component successfully fetches data using the useHolderData hook",
+        "Component displays holder table with columns for address, balance, and percentage of total supply",
+        "Component shows appropriate loading states while fetching data",
+        "Component handles error states gracefully if data fetch fails",
+        "Component appears on the page in its designated position"
+      ]
+    },
+    {
+      "id": "REQ-78",
+      "text": "Verify the backend getIndexedTransactions method exists and returns transaction data in the correct format expected by the frontend TransactionList component",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "the transaction section isn't showing"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend main.mo contains a query method named getIndexedTransactions",
+        "Method returns transaction data from stable memory storage",
+        "Return format includes all necessary transaction fields (from/to addresses, amount, timestamp, etc.)",
+        "Method returns transactions in reverse chronological order (newest first)",
+        "Method properly handles cases when no transactions are stored yet"
+      ]
+    },
+    {
+      "id": "REQ-79",
+      "text": "Verify the backend getHolderData method exists and returns complete holder list data in the correct format expected by the frontend HolderList component",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "no holders"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend main.mo contains a query method named getHolderData or similar",
+        "Method returns holder data from stable memory storage",
+        "Return format includes address, balance, and percentage of total supply for each holder",
+        "Method properly handles cases when holder data hasn't been compiled yet",
+        "Method returns all holders identified through the historical backfill and ongoing indexing"
       ]
     }
   ],
   "constraints": [
-    "Maintain single-actor architecture with all Motoko logic in backend/main.mo",
-    "Use ledger canister qroj6-lyaaa-aaaam-qeqta-cai with ICRC-2 standard for all balance and transaction queries",
-    "Preserve existing stable memory structures for transaction rolling window (last 100 transactions)",
-    "Do not modify immutable frontend paths: useInternetIdentity.ts, useInternetIdentity.tsx, useActor.ts, main.tsx, components/ui",
-    "Total supply must remain 999,999,999.92M BITTYICP for all calculations"
+    "Do not modify the backend's single-actor architecture",
+    "Do not edit immutable frontend paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui",
+    "Maintain the existing backend indexing timer and historical backfill logic",
+    "Keep the gold theme and visual styling consistent with existing components"
   ],
   "nonGoals": [
-    "Fixing address search functionality (separate issue for later)",
-    "Fixing transaction list display (separate issue for later)",
-    "Modifying token metrics section or price display",
-    "Changing UI styling or visual design of holder table",
-    "Adding new features beyond holder data fix"
+    "Changing the positioning of components (keep TransactionList and HolderList in their current intended positions per App.tsx)",
+    "Modifying the indexing logic or polling intervals",
+    "Altering the data structures stored in backend stable memory",
+    "Changing pagination settings (keep 25 transactions per page)",
+    "Adding new features beyond fixing the rendering issue"
   ],
   "imageRequirements": {
     "required": [],
