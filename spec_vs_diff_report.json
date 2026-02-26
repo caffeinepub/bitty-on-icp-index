@@ -1,0 +1,22 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-26T10:40:36.143Z",
+  "summary": "The diff only modifies `project_state.json` (a metadata/state tracking file), recording the fix request as 'pending'. The actual Motoko backend fix in `backend/main.mo` — which is the sole requirement — has not been implemented at all.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "In backend/main.mo, fix the RTS error: blob_of_principal: invalid principal crash by (1) validating principals before calling principal-related functions, (2) skipping transactions with invalid/anonymous/minting principals, and (3) ensuring the function returns remaining valid transactions without throwing.",
+      "reason": "The diff contains no changes to backend/main.mo. Only project_state.json was modified, and the feature status is recorded as 'pending', confirming the actual code fix was not applied.",
+      "evidence": [
+        "project_state.json",
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.98,
+  "changed_files": [
+    "project_state.json"
+  ]
+}

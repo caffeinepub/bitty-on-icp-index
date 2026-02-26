@@ -1,0 +1,35 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-26T10:40:36.146Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 1,
+    "implemented": 0,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "In the Motoko backend (`backend/main.mo`), fix the `RTS error: blob_of_principal: invalid principal` crash in the transaction fetching logic (`getTransactions` or equivalent function). The error occurs when processing account data from the BITTYICP ledger canister `qroj6-lyaaa-aaaam-qeqta-cai` that contains invalid or minting/burn account principals. Apply the following fix: (1) Before calling any principal-related functions (e.g., `Principal.toBlob`, `Principal.fromText`, or account identifier conversion), validate that the principal value is a well-formed, non-anonymous, non-empty principal. (2) If a transaction's account owner principal is invalid or represents a minting/burn address (e.g., the anonymous principal `aaaaa-aa` or any principal that fails validation), skip that transaction entirely rather than crashing. (3) Ensure the function returns all remaining valid transactions without throwing an RTS error.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

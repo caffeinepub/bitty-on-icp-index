@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "BITTY ON ICP Blockchain Explorer — fixing a Motoko runtime error ('blob_of_principal: invalid principal') in the Transaction History section caused by invalid/burn account principals in data from the BITTYICP ledger canister (qroj6-lyaaa-aaaam-qeqta-cai). Fix: validate principals before processing and skip invalid ones.",
+  "architectural_notes": [
+    "Backend is Motoko, querying the BITTYICP ledger canister at qroj6-lyaaa-aaaam-qeqta-cai for transaction history.",
+    "Transactions with invalid or malformed principals (e.g., minting/burn account entries) should be skipped/filtered before processing."
+  ],
+  "known_issues": [
+    "RTS error: blob_of_principal: invalid principal — crashes transaction history query when encountering invalid/burn address principals from the BITTYICP ledger canister."
+  ],
+  "isFixRequest": true,
+  "existing_features": [],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "In the Motoko backend (`backend/main.mo`), fix the `RTS error: blob_of_principal: invalid principal` crash in the transaction fetching logic (`getTransactions` or equivalent function). The error occurs when processing account data from the BITTYICP ledger canister `qroj6-lyaaa-aaaam-qeqta-cai` that contains invalid or minting/burn account principals. Apply the following fix: (1) Before calling any principal-related functions (e.g., `Principal.toBlob`, `Principal.fromText`, or account identifier conversion), validate that the principal value is a well-formed, non-anonymous, non-empty principal. (2) If a transaction's account owner principal is invalid or represents a minting/burn address (e.g., the anonymous principal `aaaaa-aa` or any principal that fails validation), skip that transaction entirely rather than crashing. (3) Ensure the function returns all remaining valid transactions without throwing an RTS error.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "BITTY ON ICP Blockchain Explorer",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

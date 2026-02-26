@@ -1,0 +1,45 @@
+{
+  "kind": "build_request",
+  "title": "Fix blob_of_principal RTS error in transaction history",
+  "projectName": "BITTY ON ICP Index",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "In the Motoko backend (`backend/main.mo`), fix the `RTS error: blob_of_principal: invalid principal` crash in the transaction fetching logic (`getTransactions` or equivalent function). The error occurs when processing account data from the BITTYICP ledger canister `qroj6-lyaaa-aaaam-qeqta-cai` that contains invalid or minting/burn account principals. Apply the following fix: (1) Before calling any principal-related functions (e.g., `Principal.toBlob`, `Principal.fromText`, or account identifier conversion), validate that the principal value is a well-formed, non-anonymous, non-empty principal. (2) If a transaction's account owner principal is invalid or represents a minting/burn address (e.g., the anonymous principal `aaaaa-aa` or any principal that fails validation), skip that transaction entirely rather than crashing. (3) Ensure the function returns all remaining valid transactions without throwing an RTS error.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-2",
+          "msg-3"
+        ],
+        "quotes": [
+          "RTS error: blob_of_principal: invalid principal",
+          "it is showing this at the bottom of the page Ledger Canister: qroj6-lyaaa-aaaam-qeqta-cai",
+          "skip those transactions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Transaction History section no longer displays 'RTS error: blob_of_principal: invalid principal'",
+        "Transactions with invalid or minting/burn account principals are silently skipped and not included in results",
+        "Valid transactions from the BITTYICP ledger canister (qroj6-lyaaa-aaaam-qeqta-cai) load and display correctly in the transaction table",
+        "The backend query function does not throw or trap on malformed principal data"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not change the frontend transaction display logic — the fix is backend only",
+    "Do not remove or replace the BITTYICP ledger canister ID qroj6-lyaaa-aaaam-qeqta-cai",
+    "Invalid transactions must be skipped silently, not surfaced as errors to the frontend"
+  ],
+  "nonGoals": [
+    "Redesigning the transaction history UI",
+    "Adding new transaction fields or columns",
+    "Changing the pagination or data fetching interval"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
